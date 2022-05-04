@@ -1,34 +1,28 @@
 import numpy as np
 import networkx as nx
-import seaborn
+# import seaborn
 import pandas
+import matplotlib.pyplot as plt
 
 
 class contin_SIR:
-    pass
-
-
-class atomic_SIR:
-    # geometric vs poisson
-    def __init__(self, size, beta, gamma):
-        self.size = size
+    def __init__(self, beta, gamma):
         self.beta = beta
         self.gamma = gamma
 
-
-        self.sus = size
+        self.sus = 1
         self.inf = 0
         self.rem = 0
 
     def begin(self, init):
-        if init > self.size:
+        if init > 1:
             raise ValueError("Initial disease infection is larger than population")
         self.sus -= init
         self.inf += init
 
     def step(self):
-        change = int(self.sus*self.inf*self.beta)
-        loss = int(self.inf * self.gamma)
+        change = self.sus*self.inf*self.beta
+        loss = self.inf * self.gamma
         self.sus -= change
         self.inf += change
 
@@ -37,12 +31,20 @@ class atomic_SIR:
 
 
 if __name__ == "__main__":
-    sim = atomic_SIR(1000, 0.5, 0.1)
-    sim.begin(5)
+
+    sim2 = contin_SIR(0.5, 0.1)
+    sim2.begin(0.01)
 
     steps = 100
+    data1 = []
+    data2 = []
     for i in range(steps):
-        sim.step()
-        print(sim.inf)
+        sim2.step()
+        data2.append(sim2.inf)
+
+    # plt.plot(data1)
+    # plt.show()
+    plt.plot(data2)
+    plt.show()
 
 
