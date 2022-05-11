@@ -45,6 +45,8 @@ class ZhangSimulation(network_sir.network_SIR):
         is_vaccinated = lambda x: self.population.population[x] == VACCINATED_STATE
         get_state = lambda x: self.population.population[x]
 
+        # TODO: Deep copy of population to ensure it is done in parallel.
+        copy = self.population.population
         for i in range(self.total_population):
             neighbour = np.random.choice(self.network[i])
             if is_vaccinated(i) != is_vaccinated(neighbour):
@@ -52,13 +54,14 @@ class ZhangSimulation(network_sir.network_SIR):
                                -self.get_payoff(get_state(i))
 
                 if random.random() < fermi(self.select_strength*payoff_delta):
-                    self.population.population[i] = get_state(neighbour)
+                    copy[i] = get_state(neighbour)
+        self.population.population = copy
 
     def run(self, seasons=500, until_stable=False):
         epidemic_sizes = []
         total_vaccinated = []
 
-        self.random_vaccinate(0.2)
+        self.random_vaccinate(0.5)
         for i in range(seasons):
             self.population.reset(reset_vaccinated=False)
             _ = self.epidemic(initial_infection=self.initial_infection)
