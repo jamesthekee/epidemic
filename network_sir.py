@@ -6,13 +6,7 @@ import pandas
 import matplotlib.pyplot as plt
 import scipy
 from functools import lru_cache
-
-
-SUSCEPTIBLE_STATE = 0
-INFECTED_STATE = 1
-REMOVED_STATE = 2
-VACCINATED_STATE = 3
-EXPOSED_STATE = 4
+from constants import *
 
 
 class Population:
@@ -48,10 +42,7 @@ class Population:
 
 class network_SIR:
 
-
     def __init__(self, network, infect_rate, recover_rate, immunity_loss=0):
-
-
         if not nx.is_connected(network):
             raise ValueError("Provided network is not connected")
 
