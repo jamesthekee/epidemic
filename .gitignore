@@ -1,4 +1,5 @@
 *.pyc
 *.xml
 *.iml
-\venv\*
+venv/*
+.idea\.gitignore
