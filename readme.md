@@ -4,4 +4,4 @@ I've studied quite a tiny bit of epidemiology and its intersection with evolutio
 of my own here. All with the hopes of improving my understanding, reading a bit more and possible educating. 
 So that I have some interesting youtube videos.
 
-For why it's called harmony, well I just wanted to use a nice short word.
+Zhang et al. [Effects of behavioral response and vaccination policy on epidemic spreading - an approach based on evolutionary-game dynamics](https://www.nature.com/articles/srep05666)
