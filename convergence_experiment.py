@@ -4,6 +4,7 @@ import networkx as nx
 import pandas
 import matplotlib.pyplot as plt
 import time
+from core.constants import *
 
 graph_properties = dict(size=1000,
                         average_degree=6,
@@ -15,7 +16,9 @@ sim_properties = dict(network=network,
                       recover_rate=0.25,
                       immunity_loss=0.0,
                       select_strength=10,
-                      vaccine_cost=0.5)
+                      vaccine_cost=0.5,
+                      policy=Policy.PARTIAL,
+                      delta=0.3)
 seasons = 3000
 window = 200
 windows = 2

@@ -1,10 +1,7 @@
-import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 from functools import lru_cache
-import random
-import time
-import network_sir
+from core import network_sir
 import math
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
-from constants import *
+from core.constants import *
 
 
 class Population:

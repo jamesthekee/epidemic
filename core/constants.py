@@ -12,4 +12,4 @@ class State(enum.Enum):
 class Policy(enum.Enum):
     NONE = 0
     PARTIAL = 1
-    FREE_ = 2
+    FREE_SUBSIDY = 2

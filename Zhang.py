@@ -1,13 +1,9 @@
 import math
 import numpy as np
-import networkx as nx
 import random
-import pandas
-import matplotlib.pyplot as plt
-import scipy
 from functools import lru_cache
-import network_sir
-from constants import *
+from core.network_sir import NetworkSIR
+from core.constants import *
 
 
 @lru_cache(maxsize=128)
@@ -15,11 +11,11 @@ def fermi(x):
     return 1 / (1 + math.exp(-x))
 
 
-class ZhangSimulation(network_sir.network_SIR):
+class ZhangSimulation(NetworkSIR):
 
     def __init__(self, policy, delta, select_strength, vaccine_cost, network, infect_rate, recover_rate,
-                 initial_infection=5):
-        super().__init__(network, infect_rate, recover_rate, immunity_loss=0)
+                 initial_infection=5, immunity_loss=0):
+        super().__init__(network, infect_rate, recover_rate, immunity_loss)
         self.policy = policy
         self.select_strength = select_strength
         self.vaccine_cost = vaccine_cost
@@ -28,12 +24,12 @@ class ZhangSimulation(network_sir.network_SIR):
         self.initial_infection = initial_infection
         self.free_vaccinated = []
 
-        if self.policy == PARTIAL_POLICY:
+        if self.policy == Policy.PARTIAL:
             if self.delta <= 0 or self.delta > 1:
                 raise ValueError("Given delta value out of expected interval of (0, 1]")
 
             self.effective_vaccine_cost = self.vaccine_cost * (1 - self.delta)
-        elif self.policy == FREE_SUBSIDY:
+        elif self.policy == Policy.FREE_SUBSIDY:
             donees = int(self.total_population * self.delta)
             self.free_vaccinated = np.random.choice(self.total_population, donees, replace=False)
 
@@ -44,18 +40,18 @@ class ZhangSimulation(network_sir.network_SIR):
         state = self.population.population[agent_index]
 
         if agent_index in self.free_vaccinated:
-            if state == VACCINATED_STATE:
+            if state == State.VACCINATED:
                 return 0
 
-        if state == SUSCEPTIBLE_STATE:
+        if state == State.SUSCEPTIBLE:
             return 0
-        elif state == INFECTED_STATE or state == REMOVED_STATE:
+        elif state == State.INFECTED or state == State.REMOVED:
             return -1
-        elif state == VACCINATED_STATE:
+        elif state == State.VACCINATED:
             return -self.effective_vaccine_cost
 
     def _update_strategies(self):
-        is_vaccinated = lambda x: self.population.population[x] == VACCINATED_STATE
+        is_vaccinated = lambda x: self.population.population[x] == State.VACCINATED
         get_state = lambda x: self.population.population[x]
 
         # TODO: Deep copy of population to ensure it is done in parallel.
@@ -80,11 +76,11 @@ class ZhangSimulation(network_sir.network_SIR):
         for i in range(seasons):
             self.population.reset(reset_vaccinated=False)
             _ = self.epidemic(initial_infection=self.initial_infection)
-            epidemic_size = self.population.count_type(INFECTED_STATE) \
-                            + self.population.count_type(REMOVED_STATE)
+            epidemic_size = self.population.count_type(State.INFECTED) \
+                            + self.population.count_type(State.REMOVED)
 
             _ = self._update_strategies()
-            vaccinated = self.population.count_type(VACCINATED_STATE)
+            vaccinated = self.population.count_type(State.VACCINATED)
 
             epidemic_sizes.append(epidemic_size)
             total_vaccinated.append(vaccinated)

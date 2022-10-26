@@ -1,18 +1,17 @@
 import Zhang
+from core.constants import *
 import networkx as nx
 import pandas
 import matplotlib.pyplot as plt
-from constants import *
 
 graph_properties = dict(size=1000,
                         average_degree=6,
                         random_mixing=0.5)
 
-# network = nx.generators.watts_strogatz_graph(graph_properties["size"], graph_properties["average_degree"], graph_properties["random_mixing"])
 network = nx.generators.barabasi_albert_graph(graph_properties["size"],
                                               graph_properties["average_degree"]//2)
 sim_properties = dict(network=network,
-                      policy=FREE_SUBSIDY,
+                      policy=Policy.FREE_SUBSIDY,
                       delta=0.7,
                       infect_rate=0.18,
                       recover_rate=0.25,
