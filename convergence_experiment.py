@@ -23,11 +23,10 @@ seasons = 3000
 window = 200
 windows = 2
 
+# Do simulation and time it.
+start = time.time()
 sim = Zhang.ZhangSimulation(**sim_properties)
 print(sim)
-
-
-start = time.time()
 data = sim.run(seasons)
 print(f"took {time.time()-start:.2f} seconds")
 
@@ -36,16 +35,20 @@ df = pandas.DataFrame(data)
 df["total_vaccinated"] /= 1000
 df["total_vaccinated"].plot()
 
-# Calculate first average window
-s = sum(df["total_vaccinated"].iloc[:window])
-values = [s]
 
-for offset in range(seasons-window-1):
-    s = s + df["total_vaccinated"].iloc[window+offset] - df["total_vaccinated"].iloc[offset]
-    values.append(s)
+def window_average(window, df):
+    s = sum(df["total_vaccinated"].iloc[:window])
+    values = [s]
 
-temp = np.array(values)
-temp = temp / window
+    for offset in range(seasons-window-1):
+        s = s + df["total_vaccinated"].iloc[window+offset] - df["total_vaccinated"].iloc[offset]
+        values.append(s)
+
+    final = np.array(values)
+    return final / window
+
+
+temp = window_average(window, df)
 plt.plot(temp)
 plt.show()
 
