@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 import time
 from core.constants import *
 
+# Experiment showing long term behaviour of simulation
+# and the percent vaccination levels reached.
+# And trying to get a some sense for did it converge.
+
+
 graph_properties = dict(size=1000,
                         average_degree=6,
                         random_mixing=0.15)
